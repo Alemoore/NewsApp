@@ -12,5 +12,5 @@ class NewsRepository @Inject constructor(
 
     suspend fun getBreakingNews(countyCode: String, pageNumber: Int) = api.getBreakingNews(countyCode, pageNumber)
 
-
+    suspend fun searchNews(searchQuery: String, pageNumber: Int) = api.searchForNews(searchQuery, pageNumber)
 }
