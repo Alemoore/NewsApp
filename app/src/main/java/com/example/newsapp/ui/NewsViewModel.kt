@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newsapp.models.Article
 import com.example.newsapp.models.NewsResponce
 import com.example.newsapp.repository.NewsRepository
 import com.example.newsapp.util.Resource
@@ -33,6 +34,16 @@ class NewsViewModel @ViewModelInject constructor(val newsRepository: NewsReposit
         searchNews.postValue(handleSearchNewsResponse(response))
     }
 
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        newsRepository.insertOrUpdate(article)
+    }
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        newsRepository.deleteArticle(article)
+    }
+
+    fun getSavedArticles() = newsRepository.getSavedArticles()
+
     private fun handleBreakingNewsResponse(response: Response<NewsResponce>): Resource<NewsResponce> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -50,5 +61,6 @@ class NewsViewModel @ViewModelInject constructor(val newsRepository: NewsReposit
         }
         return Resource.Error(message = response.message())
     }
+
 
 }
