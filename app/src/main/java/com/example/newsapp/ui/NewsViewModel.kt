@@ -9,12 +9,11 @@ import android.os.Build
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.models.Article
 import com.example.newsapp.models.NewsResponce
-import com.example.newsapp.repository.NewsRepository
+import com.example.newsapp.repository.NewsRepositoryImpl
 import com.example.newsapp.util.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -22,7 +21,7 @@ import java.io.IOException
 
 class NewsViewModel @ViewModelInject constructor(
     app: Application,
-    private val newsRepository: NewsRepository
+    private val newsRepositoryImpl: NewsRepositoryImpl
 ) : AndroidViewModel(app) {
     val breakingNews: MutableLiveData<Resource<NewsResponce>> = MutableLiveData()
     private var breakingNewsPage = 1
@@ -38,8 +37,8 @@ class NewsViewModel @ViewModelInject constructor(
         breakingNews.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
-                breakingNews.postValue(handleBreakingNewsResponse(response))
+                val response = newsRepositoryImpl.getBreakingNews(countryCode, breakingNewsPage)
+                breakingNews.postValue(response)
             } else {
                 breakingNews.postValue(Resource.Error(message = "No internet connection"))
             }
@@ -56,8 +55,8 @@ class NewsViewModel @ViewModelInject constructor(
         searchNews.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = newsRepository.searchNews(searchQuery, searchNewsPage)
-                searchNews.postValue(handleSearchNewsResponse(response))
+                val response = newsRepositoryImpl.searchNews(searchQuery, searchNewsPage)
+                searchNews.postValue(response)
             } else {
                 searchNews.postValue(Resource.Error(message = "No internet connection"))
             }
@@ -67,37 +66,17 @@ class NewsViewModel @ViewModelInject constructor(
                 else -> searchNews.postValue(Resource.Error(message = "Conversion exception"))
             }
         }
-
-
     }
 
     fun saveArticle(article: Article) = viewModelScope.launch {
-        newsRepository.insertOrUpdate(article)
+        newsRepositoryImpl.insertOrUpdate(article)
     }
 
     fun deleteArticle(article: Article) = viewModelScope.launch {
-        newsRepository.deleteArticle(article)
+        newsRepositoryImpl.deleteArticle(article)
     }
 
-    fun getSavedArticles() = newsRepository.getSavedArticles()
-
-    private fun handleBreakingNewsResponse(response: Response<NewsResponce>): Resource<NewsResponce> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
-            }
-        }
-        return Resource.Error(message = response.message())
-    }
-
-    private fun handleSearchNewsResponse(response: Response<NewsResponce>): Resource<NewsResponce> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
-            }
-        }
-        return Resource.Error(message = response.message())
-    }
+    fun getSavedArticles() = newsRepositoryImpl.getSavedArticles()
 
     private fun hasInternetConnection(): Boolean {
         val connectivityManager =
