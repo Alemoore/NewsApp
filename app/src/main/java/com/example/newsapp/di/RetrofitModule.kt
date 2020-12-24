@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-class RetrofitModule {
+object RetrofitModule {
 
     @Provides
     @Singleton

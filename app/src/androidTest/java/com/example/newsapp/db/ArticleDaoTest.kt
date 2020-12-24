@@ -9,6 +9,8 @@ import com.example.newsapp.getOrAwaitValue
 import com.example.newsapp.models.Article
 import com.example.newsapp.models.Source
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -17,27 +19,29 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
+@HiltAndroidTest
 class ArticleDaoTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var database: ArticleDatabase
+    @Inject
+    @Named("test_db")
+    lateinit var database: ArticleDatabase
     private lateinit var dao: ArticleDao
 
     @Before
     fun setup() {
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            ArticleDatabase::class.java
-        ).allowMainThreadQueries()
-            .build()
-
+        hiltRule.inject()
         dao = database.getArticleDao()
     }
 

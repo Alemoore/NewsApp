@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsapp.App
 import com.example.newsapp.models.Article
 import com.example.newsapp.models.NewsResponce
+import com.example.newsapp.repository.NewsRepository
 import com.example.newsapp.repository.NewsRepositoryImpl
 import com.example.newsapp.util.Resource
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import java.io.IOException
 
 class NewsViewModel @ViewModelInject constructor(
     app: Application,
-    private val newsRepositoryImpl: NewsRepositoryImpl
+    private val newsRepositoryImpl: NewsRepository
 ) : AndroidViewModel(app) {
     val breakingNews: MutableLiveData<Resource<NewsResponce>> = MutableLiveData()
     private var breakingNewsPage = 1
