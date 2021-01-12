@@ -10,9 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_news.*
 
 @AndroidEntryPoint
-class NewsActivity : AppCompatActivity() {
+class NewsActivity : BaseActivity() {
 
-    val viewModel: NewsViewModel by viewModels()
+    override val viewModel: NewsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

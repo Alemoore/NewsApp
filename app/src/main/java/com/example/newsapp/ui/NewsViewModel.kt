@@ -22,7 +22,7 @@ import java.io.IOException
 
 class NewsViewModel @ViewModelInject constructor(
     app: Application,
-    private val newsRepositoryImpl: NewsRepository
+    private val newsRepository: NewsRepository
 ) : AndroidViewModel(app) {
     val breakingNews: MutableLiveData<Resource<NewsResponce>> = MutableLiveData()
     private var breakingNewsPage = 1
@@ -38,7 +38,7 @@ class NewsViewModel @ViewModelInject constructor(
         breakingNews.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = newsRepositoryImpl.getBreakingNews(countryCode, breakingNewsPage)
+                val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
                 breakingNews.postValue(response)
             } else {
                 breakingNews.postValue(Resource.Error(message = "No internet connection"))
@@ -56,7 +56,7 @@ class NewsViewModel @ViewModelInject constructor(
         searchNews.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = newsRepositoryImpl.searchNews(searchQuery, searchNewsPage)
+                val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 searchNews.postValue(response)
             } else {
                 searchNews.postValue(Resource.Error(message = "No internet connection"))
@@ -70,14 +70,16 @@ class NewsViewModel @ViewModelInject constructor(
     }
 
     fun saveArticle(article: Article) = viewModelScope.launch {
-        newsRepositoryImpl.insertOrUpdate(article)
+        newsRepository.insertOrUpdate(article)
     }
 
     fun deleteArticle(article: Article) = viewModelScope.launch {
-        newsRepositoryImpl.deleteArticle(article)
+        newsRepository.deleteArticle(article)
     }
 
-    fun getSavedArticles() = newsRepositoryImpl.getSavedArticles()
+    fun getSavedArticles() = newsRepository.getSavedArticles()
+
+
 
     private fun hasInternetConnection(): Boolean {
         val connectivityManager =

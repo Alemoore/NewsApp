@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
 import com.example.newsapp.adapters.NewsAdapter
+import com.example.newsapp.ui.BaseActivity
 import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +24,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as NewsActivity).viewModel
+        viewModel = (activity as BaseActivity).viewModel
 
         setupRecyclerView()
 

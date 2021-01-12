@@ -16,12 +16,12 @@ class NewsRepositoryImpl @Inject constructor(
 ): NewsRepository {
 
     override suspend fun getBreakingNews(countyCode: String, pageNumber: Int): Resource<NewsResponce> {
-        val response: Response<NewsResponce> = api.getBreakingNews(countyCode, pageNumber)
+        val response = api.getBreakingNews(countyCode, pageNumber)
         return handleNewsResponse(response)
     }
 
     override suspend fun searchNews(searchQuery: String, pageNumber: Int): Resource<NewsResponce> {
-        val response: Response<NewsResponce> = api.searchForNews(searchQuery, pageNumber)
+        val response = api.searchForNews(searchQuery, pageNumber)
         return handleNewsResponse(response)
     }
 
@@ -39,4 +39,5 @@ class NewsRepositoryImpl @Inject constructor(
         }
         return Resource.Error(message = response.message())
     }
+
 }

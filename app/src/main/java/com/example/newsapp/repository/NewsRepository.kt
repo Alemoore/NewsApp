@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import com.example.newsapp.models.Article
 import com.example.newsapp.models.NewsResponce
 import com.example.newsapp.util.Resource
-import retrofit2.Response
 
 interface NewsRepository {
 
