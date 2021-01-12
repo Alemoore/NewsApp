@@ -7,6 +7,7 @@ Simple android application for [NewsAPI](https://newsapi.org/) written in Kotlin
 * Room 2
 * Retrofit 2
 * Coroutines 
+* JUnit4 + Truth
 
 ## If you want to run:
 1. Go to [NewsAPI](https://newsapi.org/) and generate an API key (it's 2 steps only)
